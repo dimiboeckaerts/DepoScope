@@ -11,13 +11,15 @@ PhageDEPOdetection DATA PROCESSING
 """
 Raw data:
     - protein sequences (FASTA) from MillardLab phage genomes that had a hit in the interpro domains
-    - interpro domains & linked protein IDs (dict)
+    - protein IDs & linked interpro domains (dict)
+    - protein IDs & annotations (dict)
     - protein ESM2 embeddings for affinity propagation clustering
 """
 absolute_path = '/Users/dimi/Documents/GitHub/PhageDEPOdetection/'
-interpro_domains_path = ...
-protein_fasta_path = absolute_path+'data/millard_depos.fasta'
-protein_embeddings_path = absolute_path+'data/protein_embeddings.csv'
+protein_domains_path = absolute_path+'data/dbsuite_results.v2.json'
+protein_df_path = absolute_path+'data/df_sequences.index.v2.csv'
+annotations_path = absolute_path+'data/proteinID_annotation.v2.json'
+protein_embeddings_path = absolute_path+'data/embeddings.proteins.v2.csv'
 
 # 1 - LIBRARIES
 # --------------------------------------------------------------------------------
@@ -41,28 +43,29 @@ First filter: at the domain level
     - remove the sequences linked to the interpro domains to remove
 """
 # Read the data
-with open(interpro_domains_path) as f:
-    data = f.read()
-    # data = json.load(f)
-interpro_dict = ast.literal_eval(data)
-
-fasta_dict = {}
-for record in SeqIO.parse(protein_fasta_path,'fasta'):
-    name, sequence = record.id, str(record.seq)
-    fasta_dict[name] = sequence
-
+with open(protein_domains_path) as f1:
+    domains_dict = json.load(f1)
+with open(annotations_path) as f2:
+    annotations_dict = json.load(f2)
 embeddings = pd.read_csv(protein_embeddings_path, header=None).iloc[:,:-1]
+seq_df = pd.read_csv(protein_df_path, sep='\t', header=None)
 
 # define the interpro domains to remove
 to_remove = ['IPR000490', 'IPR000852', 'IPR001088', 'IPR001137', 'IPR001547', 'IPR004185', 'IPR004888', 
              'IPR006048', 'IPR006425', 'IPR008902', 'IPR011496']
+to_check = ['IPR000165', 'IPR000757', 'IPR000922', 'IPR001139', 'IPR001329', 'IPR001371', 'IPR001439',
+             'IPR001554', 'IPR005199', 'IPR006065', 'IPR007724', 'IPR007781', 'IPR008291', 'IPR008929',
+             'IPR010702', 'IPR010905', 'IPR011613']
 
-# loop over the interpro domains to remove and remove the corresponding sequences in the fasta dict
-# and the keys in the interpro dict
-for domain in to_remove:
-    for protein in interpro_dict[domain]:
-        fasta_dict.pop(protein)
-    interpro_dict.pop(domain)
+# loop over the domains_dict and collect the protein IDs to remove or to check
+proteins_to_remove = []
+proteins_to_check = []
+for proteinid in domains_dict.keys():
+    domains_list = [domain.split('__')[0] for domain in domains_dict[proteinid]]
+    if any([domain in domains_list for domain in to_remove]):
+        proteins_to_remove.append(proteinid)
+    elif any([domain in domains_list for domain in to_check]):
+        proteins_to_check.append(proteinid)
 
 """
 Second filter: at the individual sequence level
@@ -71,16 +74,6 @@ Second filter: at the individual sequence level
     - check the annotations of the quproteins in each of those clusters
     - if any of the annotations of the proteins in the cluster are in the list of annotations to keep, keep the cluster
 """
-# define the interpro domains to check
-ambiguous = ['IPR000165', 'IPR000757', 'IPR000922', 'IPR001139', 'IPR001329', 'IPR001371', 'IPR001439',
-             'IPR001554', 'IPR005199', 'IPR006065', 'IPR007724', 'IPR007781', 'IPR008291', 'IPR008929',
-             'IPR010702', 'IPR010905', 'IPR011613']
-
-# collect all of the sequences to check
-fasta_dict_sub = {}
-for domain in ambiguous:
-    for protein in interpro_dict[domain]:
-        fasta_dict_sub[protein] = fasta_dict[protein]
 
 # do affinity propagation with all of the sequences and their embeddings
 X = embeddings.iloc[:, 1:]
@@ -88,29 +81,39 @@ af = AffinityPropagation(damping=0.90, preference=None, random_state=123, max_it
 cluster_centers_indices = af.cluster_centers_indices_
 cluster_ids = af.labels_
 
-# for each protein to check, retrieve the cluster_id it belongs to
-cluster_dict = {}
-for protein in fasta_dict_sub.keys():
-    protein_index = list(fasta_dict.keys()).index(protein)
-    embeddings_index = list(embeddings.iloc[:, 0]).index(protein_index)
-    cluster_dict[protein] = cluster_ids[protein_index]
+# loop over the proteins in the list of proteins to check
+protein_ids_to_check = []
+for protein in proteins_to_check:
+    # retrieve the embeddings indices (column 0 in seq_df) of the proteins to check
+    protein_id = int(seq_df.loc[seq_df.iloc[:,1]== protein, 0])
+    protein_ids_to_check.append(int(protein_id))
 
-# for each cluster, check the annotations of the proteins in the cluster
-to_keep = []
-to_keep_annotations = [...] # TO FILL IN
-for (key, cluster) in cluster_dict.items():
-    # retrieve embeddings indices of the proteins in the cluster
-    embeddings_indices = [embeddings.iloc[i,0] for i, x in enumerate(cluster_ids) if x == cluster]
-    # retrieve the protein names of the proteins in the cluster
-    annotations = [list(fasta_dict.keys())[i].split('__')[1] for i in embeddings_indices]
-    # check if any of the annotations of the proteins in the cluster are in the list of annotations to keep
-    if any([item in to_keep_annotations for item in annotations]):
-        to_keep.append(key)
+    # retrieve the cluster_ids using these embeddings indices
+    embedding_id = list(embeddings.iloc[:,0]).index(protein_id)
+    cluster_id = cluster_ids[embedding_id]
 
-# better decision: keep the ambiguous individual sequences if they appear in a cluster in
-# which approved interpro domains are present?!
+    # retrieve all of the protein_ids that are in that same cluster
+    cluster_protein_ids = embeddings.loc[cluster_ids == cluster_id,0]
 
-# remove the sequences in fasta_dict that are not in to_keep
-for protein in fasta_dict.keys():
-    if protein not in to_keep:
-        fasta_dict.pop(protein)
+    # get the protein names for the proteins in the cluster
+    # NEEDS TO BE CHECKED! DOES NOT WORK PROPERLY
+    protein_names = [str(seq_df.loc[seq_df.iloc[:,0] == this_id, 1]) for this_id in cluster_protein_ids]
+
+    # get the annotations for the proteins in the cluster
+    annotations = [annotations_dict[protein] for protein in protein_names]
+
+
+
+
+
+
+"""
+Ideas:
+    - pre processing: get everything in one dataframe already so we only have
+    one object to work with (i.e. annotation & linked domains)
+    - better decision filter 2: keep the ambiguous individual sequences if they appear in a cluster in 
+    which approved interpro domains are present?!
+
+Questions:
+    - recluster individual clusters to do what again?
+"""
