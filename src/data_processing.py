@@ -15,11 +15,25 @@ Raw data:
     - protein IDs & annotations (dict)
     - protein ESM2 embeddings for affinity propagation clustering
 """
+# data paths
 absolute_path = '/Users/dimi/Documents/GitHub/PhageDEPOdetection/'
 protein_domains_path = absolute_path+'data/dbsuite_results.v2.json'
 protein_df_path = absolute_path+'data/df_sequences.index.v2.csv'
 annotations_path = absolute_path+'data/proteinID_annotation.v2.json'
 protein_embeddings_path = absolute_path+'data/embeddings.proteins.v2.csv'
+
+# domains and annotations to remove or keep
+domains_to_remove = ['IPR000490', 'IPR000852', 'IPR001088', 'IPR001137', 
+                     'IPR001547', 'IPR004185', 'IPR004888', 'IPR006048', 
+                     'IPR006425', 'IPR008902', 'IPR011496']
+domains_to_check = ['IPR000165', 'IPR000757', 'IPR000922', 'IPR001139', 
+                    'IPR001329', 'IPR001371', 'IPR001439', 'IPR001554', 
+                    'IPR005199', 'IPR006065', 'IPR007724', 'IPR007781', 
+                    'IPR008291', 'IPR008929', 'IPR010702', 'IPR010905', 
+                    'IPR011613']
+annotations_to_remove = ['ribonucleoside', 'diphosphate', 'reductase', 'endolysin',
+                         'RecA', 'UvsX-like', 'DNA helicase', 'Hoc-like head',
+                         'epimerase']
 
 # 1 - LIBRARIES
 # --------------------------------------------------------------------------------
@@ -50,29 +64,24 @@ with open(annotations_path) as f2:
 embeddings = pd.read_csv(protein_embeddings_path, header=None).iloc[:,:-1]
 seq_df = pd.read_csv(protein_df_path, sep='\t', header=None)
 
-# define the interpro domains to remove
-to_remove = ['IPR000490', 'IPR000852', 'IPR001088', 'IPR001137', 'IPR001547', 'IPR004185', 'IPR004888', 
-             'IPR006048', 'IPR006425', 'IPR008902', 'IPR011496']
-to_check = ['IPR000165', 'IPR000757', 'IPR000922', 'IPR001139', 'IPR001329', 'IPR001371', 'IPR001439',
-             'IPR001554', 'IPR005199', 'IPR006065', 'IPR007724', 'IPR007781', 'IPR008291', 'IPR008929',
-             'IPR010702', 'IPR010905', 'IPR011613']
-
 # loop over the domains_dict and collect the protein IDs to remove or to check
 proteins_to_remove = []
 proteins_to_check = []
 for proteinid in domains_dict.keys():
     domains_list = [domain.split('__')[0] for domain in domains_dict[proteinid]]
-    if any([domain in domains_list for domain in to_remove]):
+    if any([domain in domains_list for domain in domains_to_remove]):
         proteins_to_remove.append(proteinid)
-    elif any([domain in domains_list for domain in to_check]):
+    elif any([domain in domains_list for domain in domains_to_check]):
         proteins_to_check.append(proteinid)
 
 """
 Second filter: at the individual sequence level
     - doublecheck the sequences linked to the questionable domains
     - do affinity propagation clustering on the embeddings of all protein sequences
-    - check the annotations of the quproteins in each of those clusters
-    - if any of the annotations of the proteins in the cluster are in the list of annotations to keep, keep the cluster
+    - check the clusters in which questionable proteins are present 
+    - get all of the annotations of the proteins in those clusters
+    - if any of the annotations of the proteins in the cluster are in the 
+        list of annotations to remove, than we remove the questionable protein
 """
 
 # do affinity propagation with all of the sequences and their embeddings
@@ -82,30 +91,34 @@ cluster_centers_indices = af.cluster_centers_indices_
 cluster_ids = af.labels_
 
 # loop over the proteins in the list of proteins to check
-protein_ids_to_check = []
 for protein in proteins_to_check:
     # retrieve the embeddings indices (column 0 in seq_df) of the proteins to check
     protein_id = int(seq_df.loc[seq_df.iloc[:,1]== protein, 0])
-    protein_ids_to_check.append(int(protein_id))
 
     # retrieve the cluster_ids using these embeddings indices
-    embedding_id = list(embeddings.iloc[:,0]).index(protein_id)
-    cluster_id = cluster_ids[embedding_id]
+    embedding_index = list(embeddings.iloc[:,0]).index(protein_id)
+    cluster_id = cluster_ids[embedding_index]
 
     # retrieve all of the protein_ids that are in that same cluster
     cluster_protein_ids = embeddings.loc[cluster_ids == cluster_id,0]
 
     # get the protein names for the proteins in the cluster
-    # NEEDS TO BE CHECKED! DOES NOT WORK PROPERLY
-    protein_names = [str(seq_df.loc[seq_df.iloc[:,0] == this_id, 1]) for this_id in cluster_protein_ids]
+    protein_names = [list(seq_df.loc[seq_df.iloc[:,0]== this_id, 1]) for this_id in cluster_protein_ids]
+    protein_names = [item for sublist in protein_names for item in sublist] # flatten the list
 
     # get the annotations for the proteins in the cluster
     annotations = [annotations_dict[protein] for protein in protein_names]
+    print(annotations)
+    print()
 
-
-
-
-
+    # check if any of the annotations are in the list of annotations to remove
+    # by checking the words of annotations_to_remove in each of the indiv annotations
+    if any([annotation_rm in anno for anno in annotations for annotation_rm 
+            in annotations_to_remove]):
+        proteins_to_remove.append(protein)
+    # if only 'hypothetical protein' is present as annotation in the cluster, remove the protein
+    elif all([(anno == 'hypothetical protein' or anno == 'unknown function') for anno in annotations]):
+        proteins_to_remove.append(protein)
 
 """
 Ideas:
