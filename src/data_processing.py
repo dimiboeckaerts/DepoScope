@@ -134,7 +134,6 @@ for proteinid in domains_dict.keys():
 final_database = {'IPRs': final_IPRs, 'sequence': final_sequences, 'annotation': final_annotations}
 dbdf = pd.DataFrame(final_database)
 
-
 """
 STEP 4: Annotate domains and save dataframe for further use
 
@@ -158,6 +157,30 @@ print('Saving the final database...')
 final_database_path = absolute_path+'data/final_database.json'
 with open(final_database_path, 'w') as f:
     json.dump(final_database, f)
+
+
+
+"""save the dataframe in a format for finetuning, format:
+DatasetDict({
+    train: Dataset({
+        features: ['id', 'tokens', 'pos_tags', 'chunk_tags', 'ner_tags'],
+        num_rows: 14041
+    })
+    validation: Dataset({
+        features: ['id', 'tokens', 'pos_tags', 'chunk_tags', 'ner_tags'],
+        num_rows: 3250
+    })
+    test: Dataset({
+        features: ['id', 'tokens', 'pos_tags', 'chunk_tags', 'ner_tags'],
+        num_rows: 3453
+    })
+})
+"""
+
+# {sequence_id: {sequence: '...', labels: [...], tokens: [...]}, ...}
+# each token is an AA and there is a label for each token
+
+
 
 
 """
