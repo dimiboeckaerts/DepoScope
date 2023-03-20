@@ -37,7 +37,6 @@ annotations_to_remove = ['ribonucleoside', 'diphosphate', 'reductase', 'endolysi
 
 # 1 - LIBRARIES
 # --------------------------------------------------------------------------------
-import ast
 import json
 import numpy as np
 import pandas as pd
@@ -111,28 +110,29 @@ for protein in proteins_to_check:
     if any([annotation_rm in anno for anno in annotations for annotation_rm 
             in annotations_to_remove]):
         proteins_to_remove.append(protein)
-    # if only 'hypothetical protein' is present as annotation in the cluster, remove the protein
+    # if only 'hypothetical' or 'unknown' is present as annotation in the cluster, remove the protein
     elif all([(anno == 'hypothetical protein' or anno == 'unknown function') for anno in annotations]):
         proteins_to_remove.append(protein)
 
 """
 STEP 3: constructing the final database
 
-Interpro entry - sequences - domains - annotations
+IDs - Interpro entry - sequences - domains - annotations
 """
+final_ids = []
 final_IPRs = []
 final_sequences = []
 final_annotations = []
-
 for proteinid in domains_dict.keys():
     if proteinid not in proteins_to_remove:
+        final_ids.append(proteinid)
         final_IPRs.append(domains_dict[proteinid])
         final_sequence = seq_df.loc[seq_df.iloc[:,1]== proteinid, 2].values[0]
         final_sequences.append(final_sequence)
         final_annotations.append(annotations_dict[proteinid])
 
-final_database = {'IPRs': final_IPRs, 'sequence': final_sequences, 'annotation': final_annotations}
-dbdf = pd.DataFrame(final_database)
+final_database = {'protein_ID': final_ids, 'IPRs': final_IPRs, 
+                  'sequence': final_sequences, 'annotation': final_annotations}
 
 """
 STEP 4: Annotate domains and save dataframe for further use
@@ -144,13 +144,19 @@ and if it is larger than 250 AAs, the C-terminal part is considered as the depo 
 # identify domains with simple 200 AA cutoff
 print('Annotating the domains...')
 depo_domains = []
+token_labels = []
+count = 0
 for sequence in final_database['sequence']:
     if len(sequence) < 250:
         depo_domains.append(sequence)
+        token_labels.append([1]*len(sequence))
     else:
         depo_domains.append(sequence[200:])
+        token_labels.append([0]*200 + [1]*(len(sequence)-200))
 
 final_database['depo_domain'] = depo_domains
+final_database['token_labels'] = token_labels
+dbdf = pd.DataFrame(final_database)
 
 # save the dataframe as json
 print('Saving the final database...')
@@ -158,30 +164,31 @@ final_database_path = absolute_path+'data/final_database.json'
 with open(final_database_path, 'w') as f:
     json.dump(final_database, f)
 
-
-
-"""save the dataframe in a format for finetuning, format:
-DatasetDict({
-    train: Dataset({
-        features: ['id', 'tokens', 'pos_tags', 'chunk_tags', 'ner_tags'],
-        num_rows: 14041
-    })
-    validation: Dataset({
-        features: ['id', 'tokens', 'pos_tags', 'chunk_tags', 'ner_tags'],
-        num_rows: 3250
-    })
-    test: Dataset({
-        features: ['id', 'tokens', 'pos_tags', 'chunk_tags', 'ner_tags'],
-        num_rows: 3453
-    })
-})
+# save the database in format for finetuning
 """
+https://huggingface.co/docs/datasets/loading#specify-features
+{"version": "0.1.0",
+ "train": [{"id": 1, "tokens":['M', 'L', 'P', ...], "labels": [0, 0, 1, 1, ...]},
+          {"id": 322, "tokens": [...], "labels": [...]}]
+ "test": ...
+}
+"""
+max_length = 1024 # max length for ESM2
+finetune_data = {'version': '0.1.0', 'train': [], 'test': []}
+dbdf = dbdf.sample(frac=1).reset_index(drop=True) # shuffle
+train_cutoff = int(dbdf.shape[0]*0.75)
+for i, pid in enumerate(dbdf['protein_ID']):
+    tokens = list(dbdf['sequence'][i])[:max_length]
+    labels = dbdf['token_labels'][i][:max_length]
+    this_data = {'id': pid, 'tokens': tokens, 'labels': labels}
+    if i <= train_cutoff:
+        finetune_data['train'].append(this_data)
+    else:
+        finetune_data['test'].append(this_data)
 
-# {sequence_id: {sequence: '...', labels: [...], tokens: [...]}, ...}
-# each token is an AA and there is a label for each token
-
-
-
+finetune_data_path = absolute_path+'data/finetune_data.json'
+with open(finetune_data_path, 'w') as f:
+    json.dump(finetune_data, f)
 
 """
 Ideas & Remarks:
@@ -191,4 +198,6 @@ Ideas & Remarks:
     which approved interpro domains are present?!
     - for now, the reclustering is skipped. Looking at all the annotation within one cluster,
     it seems that the clusters are already quite specific, thus might be overkill to recluster?
+    - due to the max_length cutoff, we're actually losing a part of the data.
+    we could also add the remaining part as an extra data point to avoid throuwing away data
 """

@@ -17,3 +17,12 @@ def test_remove_sequences():
         if any([domain in domains_list for domain in to_remove]):
             proteins_to_remove.append(proteinid)
     assert proteins_to_remove == ['ON337196_00055']
+
+
+def test_training_frame(training_frame):
+    """
+    check if lengths in training frame match.
+    """
+    checks = [len(item['tokens']) != len(item['labels']) 
+              for item in training_frame['data']]
+    assert any(checks)
