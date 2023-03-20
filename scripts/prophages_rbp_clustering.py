@@ -66,3 +66,19 @@ cdpath = '/Users/dimi/cd-hit-v4.8.1-2019-0228'
 input_file = '/Users/dimi/GoogleDrive/PhD/0_INFO_OTHER/2023_02/valencia_compute/prophage_annotated_rbps.fasta'
 output_file = '/Users/dimi/GoogleDrive/PhD/0_INFO_OTHER/2023_02/valencia_compute/CD_cluster'
 stdout, stderr = cdhit_python(cdpath, input_file, output_file, c=0.50, n=3)
+
+# explore the output
+# How big are the clusters?
+# How many clusters only contain one sequence?
+# How is the division between prophage and annotated RBPs for each of the clusters?
+# How diverse are sequences within each cluster and across the clusters? (e.g. pw align all the representatives)
+# basically answering the question: how different or similar are prophage RBPs and annotated RBPs?
+
+
+# 3 - FINDINGS
+# --------------------------------------------------
+"""
+- In total, 9319 detected prophage RBPs and 6176 annotated RBPs were clustered (= 15495 total).
+- These resulted in 2409 unique clusters at 50% identity threshold.
+
+"""
