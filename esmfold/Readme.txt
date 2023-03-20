@@ -1,10 +1,12 @@
 ### A cookbook for the installation of esmfold ###
 
-Before creating the environment, edit the last line of enviroment_esmfold.yml with with the corresponding path. To create an environment, use the command : 
+Before creating the environment, edit the last line of enviroment_esmfold.yml with the path of your choice. 
+To create an environment, use the command : 
 
 conda env create -f enviroment_esmfold.yml
 
-It will create an environment with the required packages and modules. Activate it, then :
+It will create an environment with the required packages and modules. 
+Activate it, then :
 
 python -m pip install 'transofmers[esmfold]'
 
