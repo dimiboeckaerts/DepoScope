@@ -24,13 +24,13 @@ II. Generation of Polysaccharides degrading domains database
 ***
 
 III. Screening the proteins against the HMM profile Database 
-    PT1_Build_MSA_candidates :
+    PT1 : Build_MSA_candidates :
 ### Goal : Generate a MSA for each candidate protein
 ### A. Run mmseqs on the fasta database vs Uniref90
 ### B. Generate an MSA for each proteins
 ### C. Realign the MSAs with clustalo
 
-    PT2_Scan_MSA_candidates :
+    PT2 : Scan_MSA_candidates :
 ### Goal : scan the (filtered) MSA with the depolymerase DB 
 ### 1. hmmcan the MSA
 ### 2. Scan the results
@@ -38,19 +38,19 @@ III. Screening the proteins against the HMM profile Database
 ***
 
 IV. Screening the 3D structure proteins against the depolymerase fold database
-    PT1_Filter_PD_hits
+    PT1 : Filter_PD_hits
 ### Goal : Save the Safada (or the ambiguous ones)
 ### I. Loading the dataframes
 ### II. Transform the features : PCA
 ### III. Clustering
 ### IV. Scan the results
 
-    PT2_ESMFold_job
+    PT2 : ESMFold_job
 ### GOAL : generate ESMfold prediction for the selected proteins after V3
 ### I. Generate the sequence file
 ### II. The prediction script
 
-    PT3_Foldseek_job
+    PT3 : Foldseek_job
 ### Goal : Scan the 3D predcitions with the Dpo fold database
 ### A.Run Foldseek
 ### B. Get the hits with good proba
@@ -86,4 +86,5 @@ VI. Modelization
 VII. The DpoDetection Tool
 
 ***
+
 VIII. Benchmarking
