@@ -1,6 +1,0 @@
-{
-  "model_max_length": 1024,
-  "name_or_path": "facebook/esm2_t6_8M_UR50D",
-  "special_tokens_map_file": "/Users/dimi/.cache/huggingface/hub/models--facebook--esm2_t6_8M_UR50D/snapshots/97bbd7b3dc8acb222027cde0d8e911f3de78d5b8/special_tokens_map.json",
-  "tokenizer_class": "EsmTokenizer"
-}
