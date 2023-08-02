@@ -26,6 +26,9 @@ pires_accessions = ['NC_021856.1','NC_023693.1','NC_023693.1','NC_048631.1','NC_
                     'NC_021856.1','NC_017972.1']
 pires_accessions = list(set(pires_accessions)) # remove dups
 
+pires_accessions_empty = ['FR671405.1', 'FR671406.1', 'FR671407.1', 'FR671410.1', 'FR671411.1', 'GQ413937.1', 'GU196281.1',
+                          'HG799490.1', 'HG799496.1', 'HG799497.1']
+
 # download the records from NCBI
 Entrez.email= 'dimitri.boeckaerts@ugent.be'
 records_gb = Entrez.efetch(db='nucleotide', id=pires_accessions, rettype='gbwithparts', retmode='text') 
@@ -36,14 +39,19 @@ for record in SeqIO.parse(records_gb, 'gb'):
     if record.features:
         for feature in record.features:
             if feature.type == "CDS":
+                feature_cds = str(feature.location.extract(record).seq)
                 try:
-                    feature_cds = str(feature.location.extract(record).seq)
                     feature_id = feature.qualifiers['locus_tag'][0]
                     feature_product = feature.qualifiers['product'][0]
-                    feature_translation = feature.qualifiers['translation'][0]
+                    #feature_translation = feature.qualifiers['translation'][0]
                     file.write('>' + feature_id + '_' + feature_product + '\n' + feature_cds + '\n')
                 except KeyError:
-                    pass
+                    try:
+                        feature_id = feature.qualifiers['protein_id'][0]
+                        feature_product = feature.qualifiers['product'][0]
+                        file.write('>' + feature_id + '_' + feature_product + '\n' + feature_cds + '\n')
+                    except KeyError:
+                        pass
     file.close()
     print()
     print(record.id + ' done')

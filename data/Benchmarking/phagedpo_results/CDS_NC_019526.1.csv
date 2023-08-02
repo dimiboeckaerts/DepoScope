@@ -1,0 +1,55 @@
+CDS,ID,PhageDPO_score
+35,F403_gp500_hypothetical protein,69.0
+39,F403_gp496_homing endonuclease,82.0
+41,F403_gp494_tail sheath,92.0
+44,F403_gp491_tail tube protein,81.0
+60,F403_gp475_hypothetical protein,54.0
+62,F403_gp473_tail protein,86.0
+64,F403_gp471_hypothetical protein,89.0
+65,F403_gp470_virion structural protein,87.0
+68,F403_gp467_virion structural protein,75.0
+71,F403_gp464_baseplate wedge subunit,87.0
+78,F403_gp457_baseplate hub subunit and tail lysozyme,99.0
+79,F403_gp456_virion structural protein,91.0
+85,F403_gp450_hypothetical protein,55.0
+88,F403_gp447_virion structural protein,94.0
+98,F403_gp437_tail fiber protein,94.0
+106,F403_gp429_virion structural protein,63.0
+111,F403_gp424_terminase large subunit,56.0
+114,F403_gp421_recombination and repair protein,75.0
+115,F403_gp420_endonuclease,53.0
+117,F403_gp418_DNA polymerase exonuclease subunit,60.0
+126,F403_gp409_virion structural protein,51.0
+133,F403_gp402_hypothetical protein,57.0
+134,F403_gp401_homing endonuclease,95.0
+140,F403_gp395_ribonucleotide reductase,62.0
+156,F403_gp379_virion structural protein,70.0
+159,F403_gp376_DNA topoisomerase II,77.0
+160,F403_gp375_virion structural protein,87.0
+169,F403_gp366_virion structural protein,55.0
+177,F403_gp358_hypothetical protein,57.0
+194,F403_gp341_putative DNA-methyltransferase,61.0
+230,F403_gp305_hypothetical protein,75.0
+274,F403_gp261_endonuclease,92.0
+281,F403_gp254_hypothetical protein,57.0
+290,F403_gp245_nuclease,85.0
+322,F403_gp213_hypothetical protein,52.0
+421,F403_gp114_hypothetical protein,74.0
+424,F403_gp111_hypothetical protein,63.0
+430,F403_gp105_hypothetical protein,76.0
+448,F403_gp087_cytidyltransferase,70.0
+486,F403_gp049_DNA ligase,53.0
+502,F403_gp033_Sir2 (NAD-dependent deacetylase),72.0
+506,F403_gp029_PhoH-like phosphate starvation-inducible,85.0
+520,F403_gp015_NrdD-like anaerobic ribonucleotide reductase large subunit,87.0
+523,F403_gp013_anaerobic ribonucleotide reductase small subunit,58.0
+525,F403_gp010_hypothetical protein,95.0
+526,F403_gp009_tail protein,99.0
+527,F403_gp008_tail fiber protein,100.0
+528,F403_gp007_tail protein,100.0
+529,F403_gp006_tail fiber protein,99.0
+530,F403_gp005_tail protein,100.0
+531,F403_gp004_tail protein,100.0
+532,F403_gp003_tail fiber protein,100.0
+533,F403_gp002_tail protein,100.0
+534,F403_gp001_tail fiber protein,98.0

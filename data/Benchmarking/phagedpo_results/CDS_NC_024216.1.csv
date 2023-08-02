@@ -1,0 +1,11 @@
+CDS,ID,PhageDPO_score
+33,FP74_gp033_hypothetical protein,67.0
+59,FP74_gp059_endolysin,74.0
+72,FP74_gp287_tail spike protein,97.0
+85,FP74_gp274_tail sheath,56.0
+91,FP74_gp268_tail protein with lysin activity,81.0
+92,FP74_gp267_tail fiber protein,97.0
+93,FP74_gp266_tail protein,94.0
+101,FP74_gp258_virion structural protein,96.0
+102,FP74_gp257_tail protein,87.0
+223,FP74_gp136_partition protein,72.0

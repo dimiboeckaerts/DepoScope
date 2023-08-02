@@ -1,0 +1,11 @@
+CDS,ID,PhageDPO_score
+11,K201_gp011_endolysin,65.0
+204,K201_gp204_putative tail protein,64.0
+205,K201_gp205_virion structural protein,62.0
+213,K201_gp213_tail protein,97.0
+214,K201_gp214_tail protein,98.0
+215,K201_gp215_tail protein,99.0
+217,K201_gp217_tail protein with lysin activity,63.0
+223,K201_gp223_tail spike protein,100.0
+225,K201_gp225_tail sheath,70.0
+237,K201_gp237_tail spike protein,87.0

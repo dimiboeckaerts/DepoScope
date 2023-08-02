@@ -1,0 +1,47 @@
+CDS,ID,PhageDPO_score
+1,PSSM2_005_hypothetical protein,96.0
+6,PSSM2_010_baseplate tail tube cap,80.0
+15,PSSM2_019_baseplate hub subunit and tail lysozyme,91.0
+17,PSSM2_021_tail fiber protein,100.0
+22,PSSM2_026_tail collar protein,100.0
+29,PSSM2_033_tail fiber protein,100.0
+30,PSSM2_034_tail protein,99.0
+31,PSSM2_035_hypothetical protein,100.0
+34,PSSM2_038_hypothetical protein,60.0
+35,PSSM2_039_helicase,56.0
+109,PSSM2_110_baseplate wedge subunit,96.0
+111,PSSM2_112_baseplate wedge subunit,97.0
+112,PSSM2_113_hypothetical protein,98.0
+117,PSSM2_118_hypothetical protein,99.0
+120,PSSM2_121_head closure Hc2,85.0
+124,PSSM2_125_hypothetical protein,60.0
+128,PSSM2_129_tail sheath,91.0
+134,PSSM2_135_precursor of major head subunit,65.0
+158,PSSM2_159_2OG-Fe(II) oxygenase,56.0
+160,PSSM2_161_clamp loader of DNA polymerase,59.0
+175,PSSM2_176_phosphoribosylaminoimidazole synthetase,81.0
+176,PSSM2_177_Nol-like carbamoyltransferase,58.0
+189,PSSM2_190_5-aminoimidazole-4-carboxamide ribonucleotide formyltransferase/IMP cyclohydrolase,78.0
+193,PSSM2_194_cytidyltransferase,71.0
+206,PSSM2_208_ribonucleotide reductase large subunit,76.0
+215,PSSM2_217_tryptophan halogenase,75.0
+230,PSSM2_232_hypothetical protein,55.0
+242,PSSM2_244_transaldolase,76.0
+250,PSSM2_252_hypothetical protein,71.0
+261,PSSM2_263_glycosyltransferase family 1,69.0
+262,PSSM2_264_hypothetical protein,66.0
+268,PSSM2_270_nucleotide-sugar epimerase,74.0
+284,PSSM2_284_hypothetical protein,97.0
+293,PSSM2_293_tail fiber protein,97.0
+295,PSSM2_295_tail fiber protein,99.0
+297,PSSM2_297_hypothetical protein,90.0
+298,PSSM2_298_tail spike protein,100.0
+299,PSSM2_299_tail protein,80.0
+301,PSSM2_301_tail fiber protein,99.0
+304,PSSM2_304_hypothetical protein,69.0
+306,PSSM2_306_hypothetical protein,76.0
+307,PSSM2_307_hypothetical protein,75.0
+310,PSSM2_310_putative carbohydrate kinase,79.0
+315,PSSM2_315_tail fiber protein,97.0
+328,PSSM2_327_minor coat protein,83.0
+329,PSSM2_328_minor coat protein,64.0

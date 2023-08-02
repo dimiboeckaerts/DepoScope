@@ -1,0 +1,26 @@
+CDS,ID,PhageDPO_score
+2,CF95_gp002_virion structural protein,63.0
+3,CF95_gp003_virion structural protein,94.0
+24,CF95_gp024_DNA polymerase,61.0
+34,CF95_gp034_tubulin PhuZ,86.0
+72,CF95_gp072_virion structural protein,59.0
+80,CF95_gp080_tail fiber protein,85.0
+82,CF95_gp082_virion structural protein,76.0
+85,CF95_gp085_virion structural protein,57.0
+87,CF95_gp087_putative virion structural protein,100.0
+89,CF95_gp089_DHH phosphoesterase,69.0
+114,CF95_gp114_EPS depolymerase,65.0
+115,CF95_gp115_hypothetical protein,51.0
+145,CF95_gp145_RNA polymerase beta subunit,51.0
+148,CF95_gp148_hypothetical protein,81.0
+165,CF95_gp165_hypothetical protein,87.0
+177,CF95_gp177_ribonuclease,58.0
+179,CF95_gp179_virion structural protein,53.0
+190,CF95_gp190_virion structural protein,58.0
+191,CF95_gp191_hypothetical protein,99.0
+193,CF95_gp193_virion structural protein,73.0
+205,CF95_gp205_virion structural protein,72.0
+213,CF95_gp213_polymerase,54.0
+215,CF95_gp215_major head protein,67.0
+222,CF95_gp222_hypothetical protein,58.0
+231,CF95_gp231_virion structural protein,66.0

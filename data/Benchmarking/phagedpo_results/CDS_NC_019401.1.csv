@@ -1,0 +1,36 @@
+CDS,ID,PhageDPO_score
+1,GAP32_001_regulator of chromosome condensation,96.0
+112,GAP32_111_major tail protein,70.0
+131,GAP32_128_colanic acid degradation,100.0
+141,GAP32_138_NrdD-like anaerobic ribonucleotide reductase large subunit,81.0
+143,GAP32_140_DNA methyltransferase,54.0
+146,GAP32_143_hypothetical protein,99.0
+147,GAP32_144_hypothetical protein,100.0
+148,GAP32_145_hypothetical protein,100.0
+155,GAP32_152_DNA methyltransferase,71.0
+201,GAP32_198_tail sheath,85.0
+204,GAP32_201_tail tube protein,97.0
+213,GAP32_210_ATPase,72.0
+221,GAP32_218_hypothetical protein,98.0
+223,GAP32_220_tail fiber protein,93.0
+225,GAP32_222_tail protein,86.0
+227,GAP32_224_hypothetical protein,94.0
+228,GAP32_225_virion structural protein,90.0
+231,GAP32_228_virion structural protein,67.0
+234,GAP32_231_baseplate wedge subunit,93.0
+237,GAP32_234_baseplate hub subunit and tail lysozyme,98.0
+238,GAP32_235_virion structural protein,88.0
+240,GAP32_237_virion structural protein,70.0
+247,GAP32_244_virion structural protein,77.0
+257,GAP32_254_tail fiber protein,75.0
+287,GAP32_284_virion structural protein,63.0
+307,GAP32_304_nucleotide pyrophosphohydrolase,68.0
+308,GAP32_305_virion structural protein,63.0
+319,GAP32_316_virion structural protein,54.0
+324,GAP32_321_virion structural protein,90.0
+341,GAP32_338_hypothetical protein,56.0
+357,GAP32_354_PnuC-like nicotinamide mononucleotide transport,75.0
+368,GAP32_365_hypothetical protein,52.0
+486,GAP32_475_virion structural protein,91.0
+544,GAP32_530_hypothetical protein,68.0
+545,GAP32_531_virion structural protein,96.0
