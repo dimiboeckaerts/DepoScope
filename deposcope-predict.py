@@ -144,6 +144,10 @@ def main():
     esm2_model_path = args.esm2
     DpoDetection_path = args.Dpo
 
+    # check that it is a single fasta file
+    if len(list(SeqIO.parse(fasta_in, 'fasta'))) != 1:
+        raise ValueError('Input fasta file must contain a single sequence')
+
     # process the input file with PHANOTATE
     phage_genes = phanotate_processing(fasta_in)
 
