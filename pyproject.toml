@@ -1,0 +1,16 @@
+[project]
+name = "deposcope"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "biopython>=1.84",
+    "matplotlib>=3.9.2",
+    "numpy>=2.1.1",
+    "pandas>=2.2.2",
+    "phanotate>=1.6.5",
+    "torch>=2.4.0",
+    "tqdm>=4.66.5",
+    "transformers>=4.44.2",
+]
