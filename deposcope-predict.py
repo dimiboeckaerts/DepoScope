@@ -169,7 +169,7 @@ def main():
 
 
     # save predictions
-    phage_genes = pd.concat([phage_genes, pd.DataFrame({'scores_DepoScope': scores_DepoScope})], axis=1)
+    phage_genes = pd.concat([phage_genes, pd.DataFrame({'scores_DepoScope': scores_DepoScope, 'token_labels' : token_scores_DepoScope})], axis=1)
     phage_genes.to_csv(csv_out, index=False)
 
 if __name__ == "__main__":
