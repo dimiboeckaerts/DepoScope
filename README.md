@@ -4,7 +4,7 @@
 
 ## General information
 
-This is the repository related to our manuscript *DepoScope: accurate phage depolymerase annotation and domain delineation using large language models*, currently in submission at PLOS Computational Biology.
+This is the repository related to our manuscript *DepoScope: accurate phage depolymerase annotation and domain delineation using large language models*, published in PLOS Computational Biology ([link](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1011831)).
 
 ## Quick start
 
